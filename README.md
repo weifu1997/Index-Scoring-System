@@ -4,6 +4,12 @@ An Apple-style, interactive web application for scoring Nasdaq-100 (NDX) and S&P
 
 一款苹果风格的交互式 Web 应用，用于根据估值、趋势和情绪对纳指 100 (NDX) 和标普 500 (SPX) 进行投资性价比评分。
 
+<img width="2550" height="1233" alt="CN" src="https://github.com/user-attachments/assets/fdef0c31-1fe4-4e2e-839a-4f0e86b651e8" />
+
+<img width="2550" height="1233" alt="EN" src="https://github.com/user-attachments/assets/0a7e3630-edbb-40cc-a8d3-ae1edf138614" />
+
+
+
 ---
 
 ## 1. Calculation Formulas 
