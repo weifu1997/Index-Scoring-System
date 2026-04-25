@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page-title">指数投资定投系统</title>
+    <style>
+        /* Apple 风格 CSS 核心变量 (白天模式) */
+        :root {
+            --bg-color: #F5F5F7;
+            --card-bg: #FFFFFF;
+            --text-main: #1D1D1F;
+            --text-muted: #86868B;
+            --border-color: #D2D2D7;
+            --apple-blue: #007AFF;
+            --nav-bg: rgba(229, 229, 234, 0.85);
+            --segment-bg: transparent;
+            --segment-slider: #FFFFFF;
+            --segment-text-active: #1D1D1F;
+            --segment-text-inactive: #8E8E93;
+            --table-hover: #F9F9F9;
+        }
+
+        /* Apple 风格 CSS 核心变量 (黑夜模式) */
+        [data-theme="dark"] {
+            --bg-color: #000000;
+            --card-bg: #1C1C1E;
+            --text-main: #F5F5F7;
+            --text-muted: #98989D;
+            --border-color: #38383A;
+            --apple-blue: #0A84FF;
+            --nav-bg: rgba(30, 30, 30, 0.85);
+            --segment-bg: transparent;
+            --segment-slider: #3A3A3C;
+            --segment-text-active: #FFFFFF;
+            --segment-text-inactive: #8E8E93;
+            --table-hover: #2C2C2E;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 70px 20px 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- 右上角控制区 (语言 & 黑夜模式) --- */
+        .top-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        /* 语言下拉菜单 */
+        .lang-select {
+            appearance: none;
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 6px 28px 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%2386868B" d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+        
+        .lang-select:focus {
+            border-color: var(--apple-blue);
+        }
+
+        /* Apple 风格 Toggle 滑轨 */
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .theme-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #E5E5EA;
+            transition: .4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 24px;
+        }
+
+        [data-theme="dark"] .theme-slider {
+            background-color: #3A3A3C;
+        }
+
+        .theme-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: #FFFFFF;
+            transition: .4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        input:checked + .theme-slider {
+            background-color: #34C759;
+        }
+
+        input:checked + .theme-slider:before {
+            transform: translateX(20px);
+        }
+
+        /* ----------------------- */
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: opacity 0.3s ease, color 0.3s ease;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 输入区排版 */
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            transition: border-color 0.2s, background-color 0.3s, color 0.3s;
+        }
+
+        input:focus { border-color: var(--apple-blue); }
+
+        button {
+            background-color: var(--apple-blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.1s, opacity 0.2s, background-color 0.3s;
+        }
+
+        button:active { transform: scale(0.98); }
+        button:hover { opacity: 0.9; }
+
+        /* 结果展示区 */
+        .results-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .result-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .result-box h2 {
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        /* ================= 完美还原布局的核心修改区 ================= */
+        .score-details {
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            color: var(--text-muted);
+        }
+
+        /* 废弃原有的 float，改用 flex 两端对齐，彻底解决中英文和多标签换行错位问题 */
+        .score-details > div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score-details span[id] {
+            color: var(--text-main);
+            font-weight: 500;
+            text-align: right;
+        }
+        /* ========================================================= */
+
+        .rating-card {
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            transition: background 0.5s ease;
+            margin-top: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .rating-score {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .rating-level {
+            font-size: 24px;
+            font-weight: 600;
+            margin-top: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .rating-desc {
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+
+        /* 历史记录表格 */
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: var(--card-bg);
+            z-index: 1;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        tbody tr:hover {
+            background-color: var(--table-hover);
+        }
+
+        th { color: var(--text-muted); font-weight: 500; }
+
+        .history-rating {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 6px;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* 渐变色系设定 */
+        .bg-A { background: linear-gradient(135deg, #34C759, #248A3D); }
+        .bg-B { background: linear-gradient(135deg, #007AFF, #0056B3); }
+        .bg-C { background: linear-gradient(135deg, #FFCC00, #D4AA00); }
+        .bg-D { background: linear-gradient(135deg, #FF9500, #C27100); }
+        .bg-E { background: linear-gradient(135deg, #FF3B30, #B3241D); }
+        .bg-default { background: linear-gradient(135deg, #D2D2D7, #AEAEB2); color: white; }
+        [data-theme="dark"] .bg-default { background: linear-gradient(135deg, #3A3A3C, #2C2C2E); }
+
+        /* --- 页面切换动画 --- */
+        .view-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(15px) scale(0.98);
+            transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .view-section.active {
+            display: block;
+            animation: appleFadeIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes appleFadeIn {
+            0% { opacity: 0; transform: translateY(15px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* --- 底部悬浮滑轨控件 (Apple iOS Style) --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 4px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            transition: background-color 0.3s;
+        }
+
+        .segmented-control {
+            display: flex;
+            position: relative;
+            width: 240px;
+            height: 40px;
+        }
+
+        .segmented-control .slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background: var(--segment-slider);
+            border-radius: 21px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s;
+            z-index: 1;
+        }
+
+        .segmented-control[data-active="spx"] .slider {
+            transform: translateX(100%);
+        }
+
+        .segment-option {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--segment-text-inactive);
+            z-index: 2;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .segmented-control[data-active="ndx"] .segment-option.opt-ndx { color: var(--segment-text-active); }
+        .segmented-control[data-active="spx"] .segment-option.opt-spx { color: var(--segment-text-active); }
+
+    </style>
+</head>
+<body>
+
+<div class="top-controls">
+    <select class="lang-select" id="lang-select" onchange="changeLanguage(this.value)">
+        <option value="zh">中文</option>
+        <option value="en">EN</option>
+    </select>
+    <label class="theme-switch">
+        <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+        <span class="theme-slider"></span>
+    </label>
+</div>
+
+<div class="container">
+    <h1 id="main-title" data-i18n="title-ndx">纳指100 投资定投系统</h1>
+
+    <div id="view-ndx" class="view-section active">
+        <div class="card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label data-i18n="lbl-pe">PE十年百分位 (%)</label>
+                    <input type="number" id="ndx-pe" data-i18n-ph="ph-pe" placeholder="例如: 86.6" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label data-i18n="lbl-price">当前价格</label>
+                    <input type="number" id="ndx-price" data-i18n-ph="ph-price-ndx" placeholder="例如: 18000" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label data-i18n="lbl-ma">MA200 (200日均线)</label>
+                    <input type="number" id="ndx-ma" data-i18n-ph="ph-ma-ndx" placeholder="例如: 17000" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label data-i18n="lbl-vix">VIX指数 (标普)</label>
+                    <input type="number" id="ndx-vix" data-i18n-ph="ph-vix" placeholder="例如: 19.31" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label data-i18n="lbl-vxn">VXN指数 (纳指)</label>
+                    <input type="number" id="ndx-vxn" data-i18n-ph="ph-vxn" placeholder="例如: 22.5" step="0.01">
+                </div>
+            </div>
+            <button onclick="calculateNDX()" data-i18n="btn-calc-ndx">计算纳指评级</button>
+        </div>
+
+        <div class="results-wrapper">
+            <div class="card result-box">
+                <h2 data-i18n="title-orig">经典原版模型</h2>
+                <div class="score-details">
+                    <div><span data-i18n="res-dev">均线偏离度:</span> <span id="ndx-orig-dev">-</span></div>
+                    <div><span data-i18n="res-pe">PE得分 (满分30):</span> <span id="ndx-orig-pe">-</span></div>
+                    <div><span data-i18n="res-ma">MA得分 (满分40):</span> <span id="ndx-orig-ma">-</span></div>
+                    <div><span data-i18n="res-vix">VIX得分 (满分30):</span> <span id="ndx-orig-vix">-</span></div>
+                </div>
+                <div class="rating-card bg-default" id="ndx-orig-card">
+                    <div class="rating-score" id="ndx-orig-total">-- / 100</div>
+                    <div class="rating-level" id="ndx-orig-lvl"><span data-i18n="lvl-placeholder">- 级</span></div>
+                    <div class="rating-desc" id="ndx-orig-desc" data-i18n="desc-waiting">等待输入...</div>
+                </div>
+            </div>
+            <div class="card result-box">
+                <h2 data-i18n="title-mod">纳指专属模型 (VXN修正)</h2>
+                <div class="score-details">
+                    <div><span data-i18n="res-dev">均线偏离度:</span> <span id="ndx-mod-dev">-</span></div>
+                    <div><span data-i18n="res-pe">PE得分 (满分30):</span> <span id="ndx-mod-pe">-</span></div>
+                    <div><span data-i18n="res-ma">MA得分 (满分40):</span> <span id="ndx-mod-ma">-</span></div>
+                    <div><span data-i18n="res-vxn">VXN得分 (满分30):</span> <span id="ndx-mod-vxn">-</span></div>
+                </div>
+                <div class="rating-card bg-default" id="ndx-mod-card">
+                    <div class="rating-score" id="ndx-mod-total">-- / 100</div>
+                    <div class="rating-level" id="ndx-mod-lvl"><span data-i18n="lvl-placeholder">- 级</span></div>
+                    <div class="rating-desc" id="ndx-mod-desc" data-i18n="desc-waiting">等待输入...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 style="font-size: 18px; margin-top: 0;" data-i18n="title-history-ndx">NDX 历史记录</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-i18n="th-date">日期时间</th>
+                            <th>PE%</th>
+                            <th data-i18n="th-dev">偏离度</th>
+                            <th>VIX</th>
+                            <th>VXN</th>
+                            <th data-i18n="th-orig-score">原版分</th>
+                            <th data-i18n="th-orig-lvl">原版级</th>
+                            <th data-i18n="th-mod-score">专属分</th>
+                            <th data-i18n="th-mod-lvl">专属级</th>
+                            <th data-i18n="th-action">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ndx-history"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-spx" class="view-section">
+        <div class="card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label data-i18n="lbl-pe">PE十年百分位 (%)</label>
+                    <input type="number" id="spx-pe" data-i18n-ph="ph-pe-spx" placeholder="例如: 75.2" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label data-i18n="lbl-price">当前价格</label>
+                    <input type="number" id="spx-price" data-i18n-ph="ph-price-spx" placeholder="例如: 5000" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label data-i18n="lbl-ma">MA200 (200日均线)</label>
+                    <input type="number" id="spx-ma" data-i18n-ph="ph-ma-spx" placeholder="例如: 4600" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label data-i18n="lbl-vix-spx">VIX恐慌指数</label>
+                    <input type="number" id="spx-vix" data-i18n-ph="ph-vix-spx" placeholder="例如: 15.5" step="0.01">
+                </div>
+            </div>
+            <button onclick="calculateSPX()" data-i18n="btn-calc-spx">计算标普评级</button>
+        </div>
+
+        <div class="card result-box">
+            <h2 data-i18n="title-spx-res">综合评分与操作建议</h2>
+            <div class="score-details" style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+                <div style="width: 45%;"><span data-i18n="res-dev">均线偏离度:</span> <span id="spx-dev">-</span></div>
+                <div style="width: 45%;"><span data-i18n="res-pe-short">PE得分 / 30:</span> <span id="spx-pe-score">-</span></div>
+                <div style="width: 45%; margin-top: 10px;"><span data-i18n="res-ma-short">MA得分 / 40:</span> <span id="spx-ma-score">-</span></div>
+                <div style="width: 45%; margin-top: 10px;"><span data-i18n="res-vix-short">VIX得分 / 30:</span> <span id="spx-vix-score">-</span></div>
+            </div>
+            <div class="rating-card bg-default" id="spx-card" style="margin-top: 20px;">
+                <div class="rating-score" id="spx-total">-- / 100</div>
+                <div class="rating-level" id="spx-lvl"><span data-i18n="lvl-placeholder">- 级</span></div>
+                <div class="rating-desc" id="spx-desc" data-i18n="desc-waiting">等待输入...</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 style="font-size: 18px; margin-top: 0;" data-i18n="title-history-spx">SPX 历史记录</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-i18n="th-date">日期时间</th>
+                            <th>PE%</th>
+                            <th data-i18n="th-price">现价</th>
+                            <th data-i18n="th-dev">偏离度</th>
+                            <th>VIX</th>
+                            <th data-i18n="th-total-score">总得分</th>
+                            <th data-i18n="th-rating">评级</th>
+                            <th data-i18n="th-action">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="spx-history"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-nav">
+    <div class="segmented-control" id="sys-toggle" data-active="ndx">
+        <div class="slider"></div>
+        <div class="segment-option opt-ndx" onclick="switchSystem('ndx')" data-i18n="nav-ndx">NDX 纳指</div>
+        <div class="segment-option opt-spx" onclick="switchSystem('spx')" data-i18n="nav-spx">SPX 标普</div>
+    </div>
+</div>
+
+<script>
+    // --- 国际化翻译字典 ---
+    const i18nDict = {
+        zh: {
+            "page-title": "指数投资定投系统",
+            "title-ndx": "纳指100 投资定投系统",
+            "title-spx": "标普500 投资定投系统",
+            "lbl-pe": "PE十年百分位 (%)",
+            "lbl-price": "当前价格",
+            "lbl-ma": "MA200 (200日均线)",
+            "lbl-vix": "VIX指数 (标普)",
+            "lbl-vxn": "VXN指数 (纳指)",
+            "lbl-vix-spx": "VIX恐慌指数",
+            "ph-pe": "例如: 86.6",
+            "ph-price-ndx": "例如: 18000",
+            "ph-ma-ndx": "例如: 17000",
+            "ph-vix": "例如: 19.31",
+            "ph-vxn": "例如: 22.5",
+            "ph-pe-spx": "例如: 75.2",
+            "ph-price-spx": "例如: 5000",
+            "ph-ma-spx": "例如: 4600",
+            "ph-vix-spx": "例如: 15.5",
+            "btn-calc-ndx": "计算纳指评级",
+            "btn-calc-spx": "计算标普评级",
+            "title-orig": "经典原版模型",
+            "title-mod": "纳指专属模型 (VXN修正)",
+            "res-dev": "均线偏离度:",
+            "res-pe": "PE得分 (满分30):",
+            "res-ma": "MA得分 (满分40):",
+            "res-vix": "VIX得分 (满分30):",
+            "res-vxn": "VXN得分 (满分30):",
+            "lvl-placeholder": "- 级",
+            "desc-waiting": "等待输入...",
+            "title-history-ndx": "NDX 历史记录",
+            "th-date": "日期时间",
+            "th-dev": "偏离度",
+            "th-orig-score": "原版分",
+            "th-orig-lvl": "原版级",
+            "th-mod-score": "专属分",
+            "th-mod-lvl": "专属级",
+            "th-action": "操作",
+            "title-spx-res": "综合评分与操作建议",
+            "res-pe-short": "PE得分 / 30:",
+            "res-ma-short": "MA得分 / 40:",
+            "res-vix-short": "VIX得分 / 30:",
+            "title-history-spx": "SPX 历史记录",
+            "th-price": "现价",
+            "th-total-score": "总得分",
+            "th-rating": "评级",
+            "nav-ndx": "NDX 纳指",
+            "nav-spx": "SPX 标普",
+            "btn-delete": "删除",
+            "alert-incomplete": "请完整填写数据！",
+            "alert-ma": "MA200 必须大于0！",
+            "lvl-text": "级",
+            "desc-A": "股价很低，建议加仓",
+            "desc-B": "股价较低，考虑加仓",
+            "desc-C": "股价适中，持仓定投",
+            "desc-D": "股价较高，持仓定投",
+            "desc-E": "股价很高，适当减仓"
+        },
+        en: {
+            "page-title": "Index DCA Rating System",
+            "title-ndx": "Nasdaq 100 DCA System",
+            "title-spx": "S&P 500 DCA System",
+            "lbl-pe": "10-Yr PE Percentile (%)",
+            "lbl-price": "Current Price",
+            "lbl-ma": "MA200 (200-Day Avg)",
+            "lbl-vix": "VIX Index (S&P)",
+            "lbl-vxn": "VXN Index (Nasdaq)",
+            "lbl-vix-spx": "VIX Fear Index",
+            "ph-pe": "e.g., 86.6",
+            "ph-price-ndx": "e.g., 18000",
+            "ph-ma-ndx": "e.g., 17000",
+            "ph-vix": "e.g., 19.31",
+            "ph-vxn": "e.g., 22.5",
+            "ph-pe-spx": "e.g., 75.2",
+            "ph-price-spx": "e.g., 5000",
+            "ph-ma-spx": "e.g., 4600",
+            "ph-vix-spx": "e.g., 15.5",
+            "btn-calc-ndx": "Calculate NDX Rating",
+            "btn-calc-spx": "Calculate SPX Rating",
+            "title-orig": "Classic Model",
+            "title-mod": "NDX Exclusive (VXN Mod)",
+            "res-dev": "MA Deviation:",
+            "res-pe": "PE Score (Out of 30):",
+            "res-ma": "MA Score (Out of 40):",
+            "res-vix": "VIX Score (Out of 30):",
+            "res-vxn": "VXN Score (Out of 30):",
+            "lvl-placeholder": "- Lvl",
+            "desc-waiting": "Waiting for input...",
+            "title-history-ndx": "NDX History",
+            "th-date": "Date/Time",
+            "th-dev": "Dev",
+            "th-orig-score": "Orig. Score",
+            "th-orig-lvl": "Orig. Lvl",
+            "th-mod-score": "Excl. Score",
+            "th-mod-lvl": "Excl. Lvl",
+            "th-action": "Action",
+            "title-spx-res": "Comprehensive Score & Action",
+            "res-pe-short": "PE Score / 30:",
+            "res-ma-short": "MA Score / 40:",
+            "res-vix-short": "VIX Score / 30:",
+            "title-history-spx": "SPX History",
+            "th-price": "Price",
+            "th-total-score": "Total Score",
+            "th-rating": "Rating",
+            "nav-ndx": "NDX",
+            "nav-spx": "SPX",
+            "btn-delete": "Del",
+            "alert-incomplete": "Please fill in all fields!",
+            "alert-ma": "MA200 must be greater than 0!",
+            "lvl-text": "Lvl",
+            "desc-A": "Price very low, suggest adding",
+            "desc-B": "Price low, consider adding",
+            "desc-C": "Price fair, hold & DCA",
+            "desc-D": "Price high, hold & DCA",
+            "desc-E": "Price very high, trim position"
+        }
+    };
+
+    let currentLang = 'zh';
+
+    function toggleTheme() {
+        const isDark = document.getElementById('theme-toggle').checked;
+        if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    function changeLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('language', lang);
+        applyLanguage();
+        renderHistory('ndx');
+        renderHistory('spx');
+        updateDynamicText();
+    }
+
+    function applyLanguage() {
+        const dict = i18nDict[currentLang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key]) el.innerText = dict[key];
+        });
+        document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+            const key = el.getAttribute('data-i18n-ph');
+            if (dict[key]) el.placeholder = dict[key];
+        });
+        const activeSys = document.getElementById('sys-toggle').getAttribute('data-active');
+        document.getElementById('main-title').innerText = dict[activeSys === 'ndx' ? 'title-ndx' : 'title-spx'];
+    }
+
+    function getRatingLevelAndClass(score) {
+        if (score >= 80) return { level: 'A', class: 'A' };
+        if (score >= 60) return { level: 'B', class: 'B' };
+        if (score >= 40) return { level: 'C', class: 'C' };
+        if (score >= 10) return { level: 'D', class: 'D' };
+        return { level: 'E', class: 'E' };
+    }
+
+    function getRatingText(levelClass) {
+        return i18nDict[currentLang][`desc-${levelClass}`];
+    }
+
+    function updateDynamicText() {
+        ['ndx-orig', 'ndx-mod', 'spx'].forEach(prefix => {
+            const descEl = document.getElementById(`${prefix}-desc`);
+            const cardEl = document.getElementById(`${prefix}-card`);
+            if (!descEl || !cardEl) return;
+            
+            const classList = cardEl.className;
+            let currentClass = 'default';
+            ['A','B','C','D','E'].forEach(c => { if(classList.includes(`bg-${c}`)) currentClass = c; });
+            
+            if (currentClass === 'default') {
+                descEl.innerText = i18nDict[currentLang]['desc-waiting'];
+                document.getElementById(`${prefix}-lvl`).innerText = i18nDict[currentLang]['lvl-placeholder'];
+            } else {
+                descEl.innerText = getRatingText(currentClass);
+                document.getElementById(`${prefix}-lvl`).innerText = `${currentClass} ${i18nDict[currentLang]['lvl-text']}`;
+            }
+        });
+    }
+
+    function switchSystem(target) {
+        document.getElementById('sys-toggle').setAttribute('data-active', target);
+        const title = document.getElementById('main-title');
+        title.style.opacity = 0;
+        setTimeout(() => {
+            title.innerText = i18nDict[currentLang][target === 'ndx' ? 'title-ndx' : 'title-spx'];
+            title.style.opacity = 1;
+        }, 150);
+
+        if (target === 'ndx') {
+            document.getElementById('view-spx').classList.remove('active');
+            setTimeout(() => document.getElementById('view-ndx').classList.add('active'), 50);
+        } else {
+            document.getElementById('view-ndx').classList.remove('active');
+            setTimeout(() => document.getElementById('view-spx').classList.add('active'), 50);
+        }
+    }
+
+    function calculateNDX() {
+        const pe = parseFloat(document.getElementById('ndx-pe').value);
+        const price = parseFloat(document.getElementById('ndx-price').value);
+        const ma = parseFloat(document.getElementById('ndx-ma').value);
+        const vix = parseFloat(document.getElementById('ndx-vix').value);
+        const vxn = parseFloat(document.getElementById('ndx-vxn').value);
+
+        if (isNaN(pe) || isNaN(price) || isNaN(ma) || isNaN(vix) || isNaN(vxn)) return alert(i18nDict[currentLang]['alert-incomplete']);
+        if (ma <= 0) return alert(i18nDict[currentLang]['alert-ma']);
+
+        const dev = ((price - ma) / ma) * 100;
+        const devText = (dev > 0 ? "+" : "") + dev.toFixed(2) + "%";
+        document.getElementById('ndx-orig-dev').innerText = devText;
+        document.getElementById('ndx-mod-dev').innerText = devText;
+
+        let peScore = Math.max(0, Math.min(30, 30 * (1 - pe / 100)));
+        let maScore = Math.max(0, Math.min(40, 20 - dev * 2));
+        
+        let vixScore = Math.max(0, Math.min(30, (vix - 15) * 2));
+        const origTotal = peScore + maScore + vixScore;
+        const origInfo = getRatingLevelAndClass(origTotal);
+
+        let vxnScore = Math.max(0, Math.min(30, ((vxn - 20) / 20) * 30));
+        const modTotal = peScore + maScore + vxnScore;
+        const modInfo = getRatingLevelAndClass(modTotal);
+
+        updateCardUI('ndx-orig', peScore, maScore, vixScore, origTotal, origInfo);
+        updateCardUI('ndx-mod', peScore, maScore, vxnScore, modTotal, modInfo);
+
+        saveToHistory('ndx', {
+            date: new Date().toLocaleString(currentLang === 'zh' ? 'zh-CN' : 'en-US', {month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit'}),
+            pe, dev: devText, vix, vxn,
+            origTotal: origTotal.toFixed(1), origClass: origInfo.class,
+            modTotal: modTotal.toFixed(1), modClass: modInfo.class
+        });
+    }
+
+    function calculateSPX() {
+        const pe = parseFloat(document.getElementById('spx-pe').value);
+        const price = parseFloat(document.getElementById('spx-price').value);
+        const ma = parseFloat(document.getElementById('spx-ma').value);
+        const vix = parseFloat(document.getElementById('spx-vix').value);
+
+        if (isNaN(pe) || isNaN(price) || isNaN(ma) || isNaN(vix)) return alert(i18nDict[currentLang]['alert-incomplete']);
+        if (ma <= 0) return alert(i18nDict[currentLang]['alert-ma']);
+
+        const dev = ((price - ma) / ma) * 100;
+        const devText = (dev > 0 ? "+" : "") + dev.toFixed(2) + "%";
+        
+        let peScore = Math.max(0, Math.min(30, 30 * (1 - pe / 100)));
+        let maScore = Math.max(0, Math.min(40, 20 - dev * 2));
+        let vixScore = Math.max(0, Math.min(30, (vix - 15) * 2));
+
+        const total = peScore + maScore + vixScore;
+        const info = getRatingLevelAndClass(total);
+
+        document.getElementById('spx-dev').innerText = devText;
+        updateCardUI('spx', peScore, maScore, vixScore, total, info);
+
+        saveToHistory('spx', {
+            date: new Date().toLocaleString(currentLang === 'zh' ? 'zh-CN' : 'en-US', {month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit'}),
+            pe, price, dev: devText, vix, total: total.toFixed(1), infoClass: info.class
+        });
+    }
+
+    function updateCardUI(prefix, peScore, maScore, vScore, total, info) {
+        document.getElementById(`${prefix}-pe${prefix === 'spx' ? '-score' : ''}`).innerText = peScore.toFixed(1);
+        document.getElementById(`${prefix}-ma${prefix === 'spx' ? '-score' : ''}`).innerText = maScore.toFixed(1);
+        document.getElementById(`${prefix}-${prefix === 'ndx-orig' || prefix === 'spx' ? 'vix' : 'vxn'}${prefix === 'spx' ? '-score' : ''}`).innerText = vScore.toFixed(1);
+        
+        document.getElementById(`${prefix}-total`).innerText = `${total.toFixed(1)} / 100`;
+        document.getElementById(`${prefix}-lvl`).innerText = `${info.level} ${i18nDict[currentLang]['lvl-text']}`;
+        document.getElementById(`${prefix}-desc`).innerText = getRatingText(info.class);
+        document.getElementById(`${prefix}-card`).className = `rating-card bg-${info.class}`;
+    }
+
+    const STORAGE_KEYS = {
+        'ndx': 'nasdaq_scores_history_v2',
+        'spx': 'sp500_scores_history_v1'
+    };
+
+    function saveToHistory(sys, record) {
+        let history = JSON.parse(localStorage.getItem(STORAGE_KEYS[sys]) || '[]');
+        history.unshift(record);
+        if (history.length > 365) history = history.slice(0, 365);
+        localStorage.setItem(STORAGE_KEYS[sys], JSON.stringify(history));
+        renderHistory(sys);
+    }
+
+    function deleteRecord(sys, index) {
+        let history = JSON.parse(localStorage.getItem(STORAGE_KEYS[sys]) || '[]');
+        history.splice(index, 1);
+        localStorage.setItem(STORAGE_KEYS[sys], JSON.stringify(history));
+        renderHistory(sys);
+    }
+
+    function renderHistory(sys) {
+        const history = JSON.parse(localStorage.getItem(STORAGE_KEYS[sys]) || '[]');
+        const tbody = document.getElementById(`${sys}-history`);
+        const delText = i18nDict[currentLang]['btn-delete'];
+        tbody.innerHTML = '';
+
+        history.forEach((row, index) => {
+            const tr = document.createElement('tr');
+            
+            let oClass = row.origClass || (row.origInfo ? row.origInfo.class : 'C');
+            let mClass = row.modClass || (row.modInfo ? row.modInfo.class : 'C');
+            let sClass = row.infoClass || (row.info ? row.info.class : 'C');
+
+            if (sys === 'ndx') {
+                tr.innerHTML = `
+                    <td>${row.date}</td><td>${row.pe}%</td><td>${row.dev}</td><td>${row.vix}</td><td>${row.vxn || '-'}</td>
+                    <td>${row.origTotal}</td><td><span class="history-rating bg-${oClass}">${oClass}</span></td>
+                    <td>${row.modTotal}</td><td><span class="history-rating bg-${mClass}">${mClass}</span></td>
+                    <td><button onclick="deleteRecord('ndx', ${index})" style="padding: 4px 8px; font-size: 12px; background: #FF3B30;">${delText}</button></td>
+                `;
+            } else {
+                tr.innerHTML = `
+                    <td>${row.date}</td><td>${row.pe}%</td><td>${row.price}</td><td>${row.dev}</td><td>${row.vix}</td>
+                    <td style="font-weight:600">${row.total}</td><td><span class="history-rating bg-${sClass}">${sClass}</span></td>
+                    <td><button onclick="deleteRecord('spx', ${index})" style="padding: 4px 8px; font-size: 12px; background: #FF3B30;">${delText}</button></td>
+                `;
+            }
+            tbody.appendChild(tr);
+        });
+    }
+
+    window.onload = () => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('theme-toggle').checked = true;
+        }
+
+        const savedLang = localStorage.getItem('language') || 'zh';
+        document.getElementById('lang-select').value = savedLang;
+        changeLanguage(savedLang);
+    };
+</script>
+
+</body>
+</html>
