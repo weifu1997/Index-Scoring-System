@@ -12,7 +12,7 @@ An Apple-style, interactive web application for scoring Nasdaq-100 (NDX) and S&P
 
 ---
 
-## 1. Calculation Formulas 
+## 1. Calculation Formulas
 
 The system uses a 100-point scale. Higher scores indicate better investment value.
 
@@ -32,7 +32,7 @@ The system uses a 100-point scale. Higher scores indicate better investment valu
 
 ---
 
-## 2. Usage Instructions 
+## 2. Usage Instructions
 
 1.  **Open the Application**: Simply open the `.html` file in any modern web browser (Chrome, Safari, Edge, etc.).
 2.  **Input Market Data**: NDX/SPX PE percentiles, latest closes, MA200, VIX, and VXN are filled automatically from the committed market-data cache. All fields remain editable.
@@ -54,20 +54,22 @@ Refresh locally with Python 3.10 or newer:
 python scripts\update_market_data.py
 ```
 
-The updater reuses a valid raw cache for 24 hours. Use `--force` to refresh immediately or `--force --offline` to verify the fallback path without network access. A scheduled GitHub Actions workflow checks the sources daily and commits generated changes.
+Monthly PE data may reuse a valid raw cache for 24 hours. Daily price and volatility caches are reused only when they have already been verified on the current Asia/Shanghai calendar day. Use `--force-daily` to refresh official daily sources, `--force` to refresh every source, or `--force --offline` to verify fallback behavior. GitHub Actions runs shortly after China midnight and again after the U.S. close.
 
-PE source data must contain at least 120 positive, strictly ordered monthly observations, cover approximately ten years, have no gap greater than 62 days, and have a latest observation no older than 62 days. Daily price data must contain at least 200 positive observations and volatility data at least 20, with the latest date no older than seven days. Fetch, parse, or validation failures preserve the previous valid cache and mark the published data as stale instead of clearing inputs.
+The page shows data provenance as separate badges: `Monthly PE cache` or `Monthly PE refresh` for valuation data, and `Today's market cache` and/or `Live refresh` for daily official market data. Test fixtures are generated only inside temporary test directories and are never published to `data/`.
+
+PE source data must contain at least 120 positive, strictly ordered monthly observations, cover approximately ten years, have no gap greater than 62 days, and have a latest observation no older than 62 days. Daily price data must contain at least 200 positive observations and volatility data at least 20, with the latest date no older than seven days. Old caches remain available for diagnostics, but the page fills price, MA200, VIX, and VXN only after all required official sources have been successfully verified on the current China calendar day. Otherwise those daily fields are cleared.
 
 ---
 
-## 3. Disclaimer 
+## 3. Disclaimer
 
 * **Data Sourcing**: PE comes from a cached third-party source; NDX prices come from Nasdaq, while SPX/VIX/VXN come from Cboe. Data may be delayed or unavailable, and users remain responsible for verification.
 * **Non-Financial Advice**: This application is for **entertainment and educational purposes only**. It does not constitute investment or financial advice. All investments involve risk.
 
 ---
 
-## 1. 计算公式 
+## 1. 计算公式
 
 系统总分为 100 分，分数越高代表当前定投性价比越高。
 
@@ -87,7 +89,7 @@ PE source data must contain at least 120 positive, strictly ordered monthly obse
 
 ---
 
-## 2. 使用方法 
+## 2. 使用方法
 
 1.  **打开应用**：直接在任何现代浏览器（Chrome, Safari, Edge 等）中打开 `.html` 文件。
 2.  **输入数据**：系统从已提交的市场数据缓存自动填入 NDX/SPX 的 PE 十年百分位、最新收盘价、MA200、VIX 与 VXN。所有字段均可手动修改。
@@ -109,13 +111,15 @@ PE source data must contain at least 120 positive, strictly ordered monthly obse
 python scripts\update_market_data.py
 ```
 
-更新器默认复用 24 小时内的有效原始缓存。`--force` 可立即刷新，`--force --offline` 可在不访问网络的情况下验证缓存降级。GitHub Actions 每天检查一次并提交生成的数据变更。
+月度 PE 数据可以复用 24 小时内的有效原始缓存；日线价格和波动率缓存只有在当前北京时间自然日已经完成校验时才会复用。`--force-daily` 只刷新官方日频源，`--force` 刷新全部数据源，`--force --offline` 用于验证缓存降级。GitHub Actions 在北京时间零点后和美股收盘后各运行一次。
 
-PE 数据必须至少包含 120 条大于零、日期严格递增的月度记录，最近 120 条需覆盖约十年，月度间隔不得超过 62 天，最新数据不得早于当前日期 62 天。日线价格至少需要 200 条正数记录，波动率至少需要 20 条，最新日期不得早于当前日期七天。抓取、解析或校验失败时保留上次有效缓存，并将应用数据标为过期，不会清空页面输入。
+页面使用独立标签显示数据来源状态：估值数据为“PE月度缓存”或“PE月度刷新”，官方日频行情为“行情今日缓存”和/或“实时刷新”。测试构造数据只存在于临时测试目录，绝不会发布到 `data/`。
+
+PE 数据必须至少包含 120 条大于零、日期严格递增的月度记录，最近 120 条需覆盖约十年，月度间隔不得超过 62 天，最新数据不得早于当前日期 62 天。日线价格至少需要 200 条正数记录，波动率至少需要 20 条，最新日期不得早于当前日期七天。旧缓存仍会保留用于诊断，但只有全部必需的官方日频源在当前北京时间自然日校验成功，页面才会填写价格、MA200、VIX 与 VXN；否则这些日频字段会被清空。
 
 ---
 
-## 3. 声明 
+## 3. 声明
 
 * **数据来源**：PE 来自缓存的第三方数据源，NDX 行情来自 Nasdaq，SPX/VIX/VXN 来自 Cboe；数据可能存在延迟或暂时不可用，用户仍需自行核实。
 * **投资风险**：本应用**仅供娱乐与教学使用**，不构成任何投资理财建议。市场有风险，投资需谨慎。

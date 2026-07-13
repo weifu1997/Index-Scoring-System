@@ -34,6 +34,7 @@ MAX_MONTHLY_GAP_DAYS = 62
 MIN_TEN_YEAR_SPAN_DAYS = 9 * 365
 DEFAULT_CACHE_MAX_AGE_HOURS = 24
 DEFAULT_TIMEOUT_SECONDS = 45
+CHINA_TIMEZONE = timezone(timedelta(hours=8))
 
 HISTORY_BLOCK_RE = re.compile(
     r"detailPE_data\s*=\s*\[(.*?)\];", re.IGNORECASE | re.DOTALL
@@ -166,6 +167,16 @@ def parse_iso_datetime(value: str) -> datetime:
     if parsed.tzinfo is None:
         parsed = parsed.replace(tzinfo=timezone.utc)
     return parsed.astimezone(timezone.utc)
+
+
+def china_calendar_date(value: datetime) -> date:
+    return value.astimezone(CHINA_TIMEZONE).date()
+
+
+def china_verification_window(value: datetime) -> tuple[date, int]:
+    local_value = value.astimezone(CHINA_TIMEZONE)
+    # U.S. regular trading is complete by 05:00 China time in both DST seasons.
+    return local_value.date(), 1 if local_value.hour >= 5 else 0
 
 
 def fetch_text(url: str, timeout: int = DEFAULT_TIMEOUT_SECONDS) -> str:
@@ -423,6 +434,22 @@ def load_json(path: Path) -> dict[str, Any]:
     return payload
 
 
+def validate_cache_metadata(
+    payload: dict[str, Any], records: list[dict[str, Any]], path: Path
+) -> None:
+    try:
+        parse_iso_datetime(str(payload["fetched_at"]))
+        latest_data_date = date.fromisoformat(str(payload["latest_data_date"]))
+        record_count = int(payload["record_count"])
+        actual_latest_date = date.fromisoformat(str(records[-1]["date"]))
+    except (KeyError, TypeError, ValueError, IndexError) as exc:
+        raise MarketDataError(f"invalid cache metadata in {path}") from exc
+    if record_count != len(records):
+        raise MarketDataError(f"cache record count mismatch in {path}")
+    if latest_data_date != actual_latest_date:
+        raise MarketDataError(f"cache latest date mismatch in {path}")
+
+
 def load_history_cache(config: IndexConfig, today: date) -> dict[str, Any]:
     payload = load_json(config.cache_path)
     if payload.get("schema_version") != SCHEMA_VERSION:
@@ -433,7 +460,7 @@ def load_history_cache(config: IndexConfig, today: date) -> dict[str, Any]:
     if not isinstance(records, list):
         raise MarketDataError(f"cache records missing in {config.cache_path}")
     validate_history(records, today=today, require_fresh=False)
-    parse_iso_datetime(str(payload["fetched_at"]))
+    validate_cache_metadata(payload, records, config.cache_path)
     return payload
 
 
@@ -490,7 +517,7 @@ def load_daily_cache(
     if not isinstance(records, list):
         raise MarketDataError(f"cache records missing in {config.cache_path}")
     validate_daily_history(records, config, today=today, require_fresh=False)
-    parse_iso_datetime(str(payload["fetched_at"]))
+    validate_cache_metadata(payload, records, config.cache_path)
     return payload
 
 
@@ -566,7 +593,17 @@ def refresh_daily_series(
         except MarketDataError as exc:
             cache_problem = str(exc)
 
-    if cached is not None and not force and cache_age(cached, now) <= max_cache_age:
+    cache_verified_today = (
+        cached is not None
+        and china_verification_window(parse_iso_datetime(str(cached["fetched_at"])))
+        == china_verification_window(now)
+    )
+    if (
+        cached is not None
+        and not force
+        and cache_verified_today
+        and cache_age(cached, now) <= max_cache_age
+    ):
         data_age = (now.date() - date.fromisoformat(cached["latest_data_date"])).days
         return build_daily_application_entry(
             config,
@@ -719,6 +756,18 @@ def build_market_summary(
         status = "source-refreshed"
 
     warnings = [component["warning"] for component in components if component["warning"]]
+    component_fetched_at = {
+        component["series"]: component["fetched_at"] for component in components
+    }
+    verification_dates = {
+        china_calendar_date(parse_iso_datetime(component["fetched_at"]))
+        for component in components
+    }
+    verified_for_date = (
+        next(iter(verification_dates)).isoformat()
+        if len(verification_dates) == 1 and not is_stale
+        else None
+    )
     summary: dict[str, Any] = {
         "data_date": price["data_date"],
         "current_price": price["current"],
@@ -727,7 +776,9 @@ def build_market_summary(
         "vix": vix["current"],
         "vix_data_date": vix["data_date"],
         "sources": sources,
-        "fetched_at": max(component["fetched_at"] for component in components),
+        "fetched_at": min(component["fetched_at"] for component in components),
+        "component_fetched_at": component_fetched_at,
+        "verified_for_date": verified_for_date,
         "status": status,
         "is_cached": all_cached,
         "has_cached_components": any_cached,
@@ -751,6 +802,7 @@ def stale_market_fallback(
             "is_cached": True,
             "has_cached_components": True,
             "is_stale": True,
+            "verified_for_date": None,
             "warning": "; ".join(errors),
         }
     )
@@ -762,9 +814,28 @@ def publish_market_data(payload: dict[str, Any]) -> None:
     script_text = "window.MARKET_DATA = " + json.dumps(
         payload, ensure_ascii=False, separators=(",", ":")
     ) + ";\n"
-    # Serialize both formats before replacing either published file.
-    atomic_write_text(MARKET_DATA_PATH, json_text)
-    atomic_write_text(MARKET_DATA_SCRIPT_PATH, script_text)
+    publications = (
+        (MARKET_DATA_PATH, json_text),
+        (MARKET_DATA_SCRIPT_PATH, script_text),
+    )
+    previous_contents = {
+        path: path.read_text(encoding="utf-8") if path.exists() else None
+        for path, _content in publications
+    }
+    try:
+        for path, content in publications:
+            atomic_write_text(path, content)
+    except Exception:
+        for path, _content in publications:
+            previous = previous_contents[path]
+            try:
+                if previous is None:
+                    path.unlink(missing_ok=True)
+                else:
+                    atomic_write_text(path, previous)
+            except OSError:
+                pass
+        raise
 
 
 def update_market_data(
@@ -773,6 +844,7 @@ def update_market_data(
     max_cache_age: timedelta,
     timeout: int,
     force: bool,
+    force_daily: bool | None = None,
     fetcher: Callable[[str, int], str] = fetch_html,
 ) -> tuple[dict[str, Any], list[str]]:
     existing = load_existing_market_data()
@@ -803,6 +875,7 @@ def update_market_data(
 
     daily: dict[str, dict[str, Any]] = {}
     daily_errors: dict[str, str] = {}
+    daily_force = force if force_daily is None else (force or force_daily)
     for config in DAILY_SERIES_CONFIGS:
         try:
             daily[config.key] = refresh_daily_series(
@@ -810,7 +883,7 @@ def update_market_data(
                 now=now,
                 max_cache_age=max_cache_age,
                 timeout=timeout,
-                force=force,
+                force=daily_force,
                 fetcher=fetcher,
             )
         except MarketDataError as exc:
@@ -861,6 +934,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         "--force", action="store_true", help="ignore cache age and refresh sources"
     )
     parser.add_argument(
+        "--force-daily",
+        action="store_true",
+        help="refresh daily price and volatility sources while allowing monthly PE cache",
+    )
+    parser.add_argument(
         "--offline",
         action="store_true",
         help="do not use the network; validate and publish cached data",
@@ -895,6 +973,7 @@ def main(argv: list[str] | None = None) -> int:
         max_cache_age=timedelta(hours=args.max_cache_age_hours),
         timeout=args.timeout,
         force=args.force,
+        force_daily=args.force_daily,
         fetcher=fetcher,
     )
 
