@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-13T11:44:17Z",
+  "generated_at": "2026-07-13T18:02:43Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
@@ -43,13 +43,13 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
           }
         ],
-        "fetched_at": "2026-07-13T11:44:17Z",
+        "fetched_at": "2026-07-13T18:02:43Z",
         "component_fetched_at": {
-          "ndx_price": "2026-07-13T11:44:17Z",
-          "vix": "2026-07-13T11:44:17Z",
-          "vxn": "2026-07-13T11:44:17Z"
+          "ndx_price": "2026-07-13T18:02:43Z",
+          "vix": "2026-07-13T18:02:43Z",
+          "vxn": "2026-07-13T18:02:43Z"
         },
-        "verified_for_date": "2026-07-13",
+        "verified_for_date": "2026-07-14",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
@@ -82,7 +82,7 @@
       "market": {
         "data_date": "2026-07-10",
         "current_price": 7575.39,
-        "ma200": 6965.1382,
+        "ma200": 6965.1381,
         "ma200_sample_count": 200,
         "vix": 15.03,
         "vix_data_date": "2026-07-10",
@@ -96,12 +96,12 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
           }
         ],
-        "fetched_at": "2026-07-13T11:44:17Z",
+        "fetched_at": "2026-07-13T18:02:43Z",
         "component_fetched_at": {
-          "spx_price": "2026-07-13T11:44:17Z",
-          "vix": "2026-07-13T11:44:17Z"
+          "spx_price": "2026-07-13T18:02:43Z",
+          "vix": "2026-07-13T18:02:43Z"
         },
-        "verified_for_date": "2026-07-13",
+        "verified_for_date": "2026-07-14",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
