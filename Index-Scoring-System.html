@@ -212,6 +212,32 @@
             flex: 0 0 auto;
         }
 
+        .market-data-content { min-width: 0; }
+
+        .market-data-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .market-data-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 7px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: var(--text-main);
+            background: rgba(142, 142, 147, 0.12);
+        }
+
+        .market-data-badge[data-kind="pe"] { background: rgba(175, 82, 222, 0.12); }
+        .market-data-badge[data-kind="cache"] { background: rgba(0, 122, 255, 0.12); }
+        .market-data-badge[data-kind="live"] { background: rgba(52, 199, 89, 0.14); }
+        .market-data-badge[data-kind="stale"] { background: rgba(255, 149, 0, 0.16); }
+
         .market-data-status[data-state="fresh"] {
             border-color: rgba(52, 199, 89, 0.35);
             background: rgba(52, 199, 89, 0.07);
@@ -497,7 +523,10 @@
             </div>
             <div class="market-data-status" id="ndx-pe-data-status" data-state="loading" role="status" aria-live="polite">
                 <span class="market-data-dot" aria-hidden="true"></span>
-                <span id="ndx-pe-data-status-text">正在加载市场数据...</span>
+                <span class="market-data-content">
+                    <span class="market-data-badges" id="ndx-data-badges"></span>
+                    <span id="ndx-pe-data-status-text">正在加载市场数据...</span>
+                </span>
             </div>
             <button onclick="calculateNDX()" data-i18n="btn-calc-ndx">计算纳指评级</button>
         </div>
@@ -579,7 +608,10 @@
             </div>
             <div class="market-data-status" id="spx-pe-data-status" data-state="loading" role="status" aria-live="polite">
                 <span class="market-data-dot" aria-hidden="true"></span>
-                <span id="spx-pe-data-status-text">正在加载市场数据...</span>
+                <span class="market-data-content">
+                    <span class="market-data-badges" id="spx-data-badges"></span>
+                    <span id="spx-pe-data-status-text">正在加载市场数据...</span>
+                </span>
             </div>
             <button onclick="calculateSPX()" data-i18n="btn-calc-spx">计算标普评级</button>
         </div>
@@ -687,17 +719,24 @@
             "alert-ma": "MA200 必须大于0！",
             "data-loading": "正在加载市场数据...",
             "data-unavailable": "自动市场数据不可用，可继续手动填写。",
-            "data-live": "最新抓取",
-            "data-cache": "24小时缓存",
+            "data-live": "今日官方源已校验",
+            "data-cache": "今日已校验缓存",
             "data-stale": "降级缓存，可能已过期",
+            "data-daily-unverified": "今日行情未通过校验，日频字段已留空",
             "data-date": "数据日期",
-            "data-fetched": "抓取时间",
+            "data-fetched": "行情校验时间",
             "data-source": "来源",
             "data-pe": "当前PE",
             "data-auto-filled": "已自动填入全部市场数据",
             "data-market-date": "行情日期",
             "data-price-value": "收盘",
             "data-ma200-value": "MA200",
+            "badge-pe-cache": "PE月度缓存",
+            "badge-pe-refresh": "PE月度刷新",
+            "badge-pe-stale": "PE缓存降级",
+            "badge-market-cache": "行情今日缓存",
+            "badge-market-refresh": "实时刷新",
+            "badge-market-stale": "行情校验失败",
             "lvl-text": "级",
             "desc-A": "股价很低，建议加仓",
             "desc-B": "股价较低，考虑加仓",
@@ -758,17 +797,24 @@
             "alert-ma": "MA200 must be greater than 0!",
             "data-loading": "Loading market data...",
             "data-unavailable": "Automatic market data is unavailable; manual input remains available.",
-            "data-live": "Latest fetch",
-            "data-cache": "24-hour cache",
+            "data-live": "Official sources verified today",
+            "data-cache": "Cache verified today",
             "data-stale": "Fallback cache; may be stale",
+            "data-daily-unverified": "Today's market data is unverified; daily fields were cleared",
             "data-date": "Data date",
-            "data-fetched": "Fetched",
+            "data-fetched": "Market verified",
             "data-source": "Source",
             "data-pe": "Current PE",
             "data-auto-filled": "All market data auto-filled",
             "data-market-date": "Market date",
             "data-price-value": "Close",
             "data-ma200-value": "MA200",
+            "badge-pe-cache": "Monthly PE cache",
+            "badge-pe-refresh": "Monthly PE refresh",
+            "badge-pe-stale": "PE cache fallback",
+            "badge-market-cache": "Today's market cache",
+            "badge-market-refresh": "Live refresh",
+            "badge-market-stale": "Market verification failed",
             "lvl-text": "Lvl",
             "desc-A": "Price very low, suggest adding",
             "desc-B": "Price low, consider adding",
@@ -837,6 +883,28 @@
             && Array.isArray(market.sources);
     }
 
+    function chinaDateParts(value = new Date()) {
+        const parts = new Intl.DateTimeFormat('en-US', {
+            timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', hourCycle: 'h23'
+        }).formatToParts(value);
+        return Object.fromEntries(parts.map(part => [part.type, part.value]));
+    }
+
+    function chinaDateString(value = new Date()) {
+        const parts = chinaDateParts(value);
+        return `${parts.year}-${parts.month}-${parts.day}`;
+    }
+
+    function isDailyMarketVerifiedToday(indexKey, market) {
+        if (!isValidDailyMarketData(indexKey, market) || market.is_stale !== false) return false;
+        const fetchedAt = new Date(market.fetched_at);
+        if (Number.isNaN(fetchedAt.getTime()) || market.verified_for_date !== chinaDateString()) return false;
+        const nowParts = chinaDateParts();
+        const fetchedParts = chinaDateParts(fetchedAt);
+        return Number(nowParts.hour) < 5 || Number(fetchedParts.hour) >= 5;
+    }
+
     function formatFetchedAt(value) {
         const parsed = new Date(value);
         if (Number.isNaN(parsed.getTime())) return value;
@@ -844,6 +912,42 @@
             year: 'numeric', month: '2-digit', day: '2-digit',
             hour: '2-digit', minute: '2-digit'
         }).format(parsed);
+    }
+
+    function renderMarketDataBadges(indexKey, entry) {
+        const container = document.getElementById(`${indexKey}-data-badges`);
+        if (!container) return;
+        container.replaceChildren();
+        if (!entry) return;
+
+        const dict = i18nDict[currentLang];
+        const badges = [];
+        if (entry.is_stale || entry.status?.includes('fallback')) {
+            badges.push({ label: dict['badge-pe-stale'], kind: 'stale' });
+        } else if (entry.status === 'source-refreshed') {
+            badges.push({ label: dict['badge-pe-refresh'], kind: 'pe' });
+        } else {
+            badges.push({ label: dict['badge-pe-cache'], kind: 'pe' });
+        }
+
+        if (!isDailyMarketVerifiedToday(indexKey, entry.market)) {
+            badges.push({ label: dict['badge-market-stale'], kind: 'stale' });
+        } else {
+            if (entry.market.is_cached || entry.market.has_cached_components) {
+                badges.push({ label: dict['badge-market-cache'], kind: 'cache' });
+            }
+            if (entry.market.status === 'source-refreshed') {
+                badges.push({ label: dict['badge-market-refresh'], kind: 'live' });
+            }
+        }
+
+        badges.forEach(({ label, kind }) => {
+            const badge = document.createElement('span');
+            badge.className = 'market-data-badge';
+            badge.dataset.kind = kind;
+            badge.textContent = label;
+            container.appendChild(badge);
+        });
     }
 
     function renderMarketDataStatus(indexKey) {
@@ -854,26 +958,36 @@
         const dict = i18nDict[currentLang];
         const entry = marketDataState.payload?.indices?.[indexKey];
         if (!marketDataState.payload && !marketDataState.error) {
+            renderMarketDataBadges(indexKey, null);
             container.dataset.state = 'loading';
             text.innerText = dict['data-loading'];
             return;
         }
-        if (!isValidMarketDataEntry(entry) || !isValidDailyMarketData(indexKey, entry.market)) {
+        if (!isValidMarketDataEntry(entry)) {
+            renderMarketDataBadges(indexKey, null);
             container.dataset.state = 'error';
             text.innerText = dict['data-unavailable'];
             return;
         }
+        if (!isDailyMarketVerifiedToday(indexKey, entry.market)) {
+            renderMarketDataBadges(indexKey, entry);
+            container.dataset.state = 'error';
+            text.innerText = [
+                `PE% ${Number(entry.pe.ten_year_percentile).toFixed(1)}%`,
+                `${dict['data-date']} ${entry.pe.data_date}`,
+                dict['data-daily-unverified']
+            ].join(' · ');
+            return;
+        }
 
-        let statusLabel = dict['data-live'];
         let state = 'fresh';
-        if (entry.is_stale || entry.market.is_stale) {
-            statusLabel = dict['data-stale'];
+        if (entry.is_stale) {
             state = 'stale';
         } else if (entry.is_cached && entry.market.is_cached) {
-            statusLabel = dict['data-cache'];
             state = 'cached';
         }
         container.dataset.state = state;
+        renderMarketDataBadges(indexKey, entry);
         const sourceNames = [entry.source.name, ...entry.market.sources.map(source => source.name)]
             .filter((name, index, values) => values.indexOf(name) === index)
             .join(' / ');
@@ -890,9 +1004,8 @@
             `${dict['data-date']} ${entry.pe.data_date}`,
             `${dict['data-market-date']} ${entry.market.data_date}`,
             ...marketValues,
-            `${dict['data-fetched']} ${formatFetchedAt(entry.fetched_at)}`,
-            `${dict['data-source']} ${sourceNames}`,
-            statusLabel
+            `${dict['data-fetched']} ${formatFetchedAt(entry.market.fetched_at)}`,
+            `${dict['data-source']} ${sourceNames}`
         ].join(' · ');
     }
 
@@ -909,21 +1022,31 @@
         marketDataState.error = null;
         ['ndx', 'spx'].forEach(indexKey => {
             const entry = payload.indices[indexKey];
-            if (!isValidMarketDataEntry(entry)) return;
-            const values = {
-                [`${indexKey}-pe`]: Number(entry.pe.ten_year_percentile).toFixed(1)
-            };
-            if (isValidDailyMarketData(indexKey, entry.market)) {
-                values[`${indexKey}-price`] = Number(entry.market.current_price).toFixed(2);
-                values[`${indexKey}-ma`] = Number(entry.market.ma200).toFixed(2);
-                values[`${indexKey}-vix`] = Number(entry.market.vix).toFixed(2);
-                if (indexKey === 'ndx') {
-                    values['ndx-vxn'] = Number(entry.market.vxn).toFixed(2);
-                }
+            const peInput = document.getElementById(`${indexKey}-pe`);
+            if (peInput) {
+                peInput.value = isValidMarketDataEntry(entry) && !entry.is_stale
+                    ? Number(entry.pe.ten_year_percentile).toFixed(1)
+                    : '';
             }
-            Object.entries(values).forEach(([inputId, value]) => {
-                const input = document.getElementById(inputId);
-                if (input && input.value.trim() === '') input.value = value;
+
+            const dailyInputIds = [`${indexKey}-price`, `${indexKey}-ma`, `${indexKey}-vix`];
+            if (indexKey === 'ndx') dailyInputIds.push('ndx-vxn');
+            if (!isDailyMarketVerifiedToday(indexKey, entry?.market)) {
+                dailyInputIds.forEach(inputId => {
+                    const input = document.getElementById(inputId);
+                    if (input) input.value = '';
+                });
+                return;
+            }
+
+            const dailyValues = {
+                [`${indexKey}-price`]: Number(entry.market.current_price).toFixed(2),
+                [`${indexKey}-ma`]: Number(entry.market.ma200).toFixed(2),
+                [`${indexKey}-vix`]: Number(entry.market.vix).toFixed(2)
+            };
+            if (indexKey === 'ndx') dailyValues['ndx-vxn'] = Number(entry.market.vxn).toFixed(2);
+            Object.entries(dailyValues).forEach(([inputId, value]) => {
+                document.getElementById(inputId).value = value;
             });
         });
         renderMarketDataStatuses();

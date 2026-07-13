@@ -214,11 +214,41 @@ class UpdateMarketDataTests(unittest.TestCase):
         self.assertEqual(
             payload["indices"]["ndx"]["market"]["ma200_sample_count"], 200
         )
+        self.assertEqual(
+            payload["indices"]["ndx"]["market"]["verified_for_date"],
+            "2026-07-13",
+        )
         published = json.loads(self.market_data_path.read_text(encoding="utf-8"))
         self.assertEqual(published, payload)
         script = self.market_data_script_path.read_text(encoding="utf-8")
         self.assertTrue(script.startswith("window.MARKET_DATA = "))
         self.assertTrue(script.endswith(";\n"))
+
+    def test_publish_rolls_back_both_application_files_on_second_write_failure(self):
+        previous = {"schema_version": 1, "generated_at": "old", "indices": {}}
+        updater.publish_market_data(previous)
+        old_json = self.market_data_path.read_text(encoding="utf-8")
+        old_script = self.market_data_script_path.read_text(encoding="utf-8")
+        real_write = updater.atomic_write_text
+        calls = 0
+
+        def fail_second_write(path, content):
+            nonlocal calls
+            calls += 1
+            if calls == 2:
+                raise OSError("simulated publish failure")
+            real_write(path, content)
+
+        with patch.object(updater, "atomic_write_text", fail_second_write):
+            with self.assertRaisesRegex(OSError, "simulated publish failure"):
+                updater.publish_market_data(
+                    {"schema_version": 1, "generated_at": "new", "indices": {}}
+                )
+
+        self.assertEqual(self.market_data_path.read_text(encoding="utf-8"), old_json)
+        self.assertEqual(
+            self.market_data_script_path.read_text(encoding="utf-8"), old_script
+        )
 
     def test_existing_application_data_survives_when_source_and_raw_cache_fail(self):
         now = datetime(2026, 7, 13, 2, 0, tzinfo=timezone.utc)
@@ -253,6 +283,7 @@ class UpdateMarketDataTests(unittest.TestCase):
             self.assertEqual(entry["pe"]["sample_count"], 120)
             self.assertEqual(entry["market"]["status"], "application-cache-fallback")
             self.assertTrue(entry["market"]["is_stale"])
+            self.assertIsNone(entry["market"]["verified_for_date"])
 
     def test_daily_parsers_validate_and_calculate_ma200(self):
         records = daily_records(start_value=25000.0)
@@ -285,6 +316,78 @@ class UpdateMarketDataTests(unittest.TestCase):
         )
         self.assertEqual(len(cboe_records), 30)
         self.assertEqual(cboe_records[-1]["close"], 29.5)
+
+    def test_daily_cache_from_previous_china_day_is_refreshed(self):
+        config = updater.DAILY_SERIES_CONFIGS[0]
+        now = datetime(2026, 7, 13, 1, 0, tzinfo=timezone.utc)
+        previous_china_day = datetime(2026, 7, 12, 15, 0, tzinfo=timezone.utc)
+        records = daily_records(start_value=25000.0)
+        cached = updater.build_daily_cache_payload(
+            config, records, previous_china_day
+        )
+        updater.atomic_write_json(config.cache_path, cached)
+        calls = []
+
+        def tracking_fetcher(url, _timeout):
+            calls.append(url)
+            return nasdaq_json(records)
+
+        entry = updater.refresh_daily_series(
+            config,
+            now=now,
+            max_cache_age=timedelta(hours=24),
+            timeout=5,
+            force=False,
+            fetcher=tracking_fetcher,
+        )
+
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(entry["status"], "source-refreshed")
+
+    def test_pre_close_window_cache_is_refreshed_after_5am_china(self):
+        config = updater.DAILY_SERIES_CONFIGS[0]
+        now = datetime(2026, 7, 12, 22, 0, tzinfo=timezone.utc)  # 06:00 China
+        before_close_window = datetime(
+            2026, 7, 12, 16, 30, tzinfo=timezone.utc
+        )  # 00:30 China
+        records = daily_records(start_value=25000.0)
+        cached = updater.build_daily_cache_payload(
+            config, records, before_close_window
+        )
+        updater.atomic_write_json(config.cache_path, cached)
+        calls = []
+
+        entry = updater.refresh_daily_series(
+            config,
+            now=now,
+            max_cache_age=timedelta(hours=24),
+            timeout=5,
+            force=False,
+            fetcher=lambda url, _timeout: calls.append(url) or nasdaq_json(records),
+        )
+
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(entry["status"], "source-refreshed")
+
+    def test_invalid_cache_timestamp_is_treated_as_bad_cache(self):
+        config = updater.INDEX_CONFIGS[0]
+        now = datetime(2026, 7, 13, 2, 0, tzinfo=timezone.utc)
+        records = monthly_records()
+        cached = updater.build_cache_payload(config, records, now)
+        cached["fetched_at"] = "not-a-timestamp"
+        updater.atomic_write_json(config.cache_path, cached)
+
+        entry = updater.refresh_index(
+            config,
+            now=now,
+            max_cache_age=timedelta(hours=24),
+            timeout=5,
+            force=False,
+            fetcher=lambda _url, _timeout: source_html(records),
+        )
+
+        self.assertEqual(entry["status"], "source-refreshed")
+        self.assertIn("invalid cache metadata", entry["warning"])
 
 
 if __name__ == "__main__":
