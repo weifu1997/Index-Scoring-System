@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-16T03:46:07Z",
+  "generated_at": "2026-07-16T22:31:02Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
@@ -18,14 +18,14 @@
         "url": "https://worldperatio.com/index/nasdaq-100/"
       },
       "fetched_at": "2026-07-16T03:46:07Z",
-      "status": "source-refreshed",
-      "is_cached": false,
+      "status": "cache-fresh",
+      "is_cached": true,
       "is_stale": false,
       "warning": null,
       "market": {
-        "data_date": "2026-07-14",
-        "current_price": 29586.29,
-        "ma200": 26268.0308,
+        "data_date": "2026-07-15",
+        "current_price": 29502.6,
+        "ma200": 26293.5573,
         "ma200_sample_count": 200,
         "vix": 15.67,
         "vix_data_date": "2026-07-15",
@@ -43,20 +43,20 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
           }
         ],
-        "fetched_at": "2026-07-16T03:46:07Z",
+        "fetched_at": "2026-07-16T22:31:02Z",
         "component_fetched_at": {
-          "ndx_price": "2026-07-16T03:46:07Z",
-          "vix": "2026-07-16T03:46:07Z",
-          "vxn": "2026-07-16T03:46:07Z"
+          "ndx_price": "2026-07-16T22:31:02Z",
+          "vix": "2026-07-16T22:31:02Z",
+          "vxn": "2026-07-16T22:31:02Z"
         },
-        "verified_for_date": "2026-07-16",
+        "verified_for_date": "2026-07-17",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
         "is_stale": false,
         "warning": null,
-        "vxn": 25.65,
-        "vxn_data_date": "2026-07-15"
+        "vxn": 27.34,
+        "vxn_data_date": "2026-07-16"
       }
     },
     "spx": {
@@ -75,8 +75,8 @@
         "url": "https://worldperatio.com/index/sp-500/"
       },
       "fetched_at": "2026-07-16T03:46:07Z",
-      "status": "source-refreshed",
-      "is_cached": false,
+      "status": "cache-fresh",
+      "is_cached": true,
       "is_stale": false,
       "warning": null,
       "market": {
@@ -96,12 +96,12 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
           }
         ],
-        "fetched_at": "2026-07-16T03:46:07Z",
+        "fetched_at": "2026-07-16T22:31:02Z",
         "component_fetched_at": {
-          "spx_price": "2026-07-16T03:46:07Z",
-          "vix": "2026-07-16T03:46:07Z"
+          "spx_price": "2026-07-16T22:31:02Z",
+          "vix": "2026-07-16T22:31:02Z"
         },
-        "verified_for_date": "2026-07-16",
+        "verified_for_date": "2026-07-17",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
