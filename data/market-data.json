@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-16T22:31:02Z",
+  "generated_at": "2026-07-17T03:45:29Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
@@ -27,12 +27,12 @@
         "current_price": 29502.6,
         "ma200": 26293.5573,
         "ma200_sample_count": 200,
-        "vix": 15.67,
-        "vix_data_date": "2026-07-15",
+        "vix": 16.73,
+        "vix_data_date": "2026-07-16",
         "sources": [
           {
             "name": "Nasdaq",
-            "url": "https://api.nasdaq.com/api/quote/NDX/historical?assetclass=index&fromdate=2025-04-22&todate=2026-07-16&limit=400"
+            "url": "https://api.nasdaq.com/api/quote/NDX/historical?assetclass=index&fromdate=2025-04-23&todate=2026-07-17&limit=400"
           },
           {
             "name": "Cboe Global Markets",
@@ -43,11 +43,11 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
           }
         ],
-        "fetched_at": "2026-07-16T22:31:02Z",
+        "fetched_at": "2026-07-17T03:45:29Z",
         "component_fetched_at": {
-          "ndx_price": "2026-07-16T22:31:02Z",
-          "vix": "2026-07-16T22:31:02Z",
-          "vxn": "2026-07-16T22:31:02Z"
+          "ndx_price": "2026-07-17T03:45:29Z",
+          "vix": "2026-07-17T03:45:29Z",
+          "vxn": "2026-07-17T03:45:29Z"
         },
         "verified_for_date": "2026-07-17",
         "status": "source-refreshed",
@@ -80,12 +80,12 @@
       "is_stale": false,
       "warning": null,
       "market": {
-        "data_date": "2026-07-15",
-        "current_price": 7572.4,
-        "ma200": 6978.7968,
+        "data_date": "2026-07-16",
+        "current_price": 7533.77,
+        "ma200": 6983.2471,
         "ma200_sample_count": 200,
-        "vix": 15.67,
-        "vix_data_date": "2026-07-15",
+        "vix": 16.73,
+        "vix_data_date": "2026-07-16",
         "sources": [
           {
             "name": "Cboe Global Markets",
@@ -96,10 +96,10 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
           }
         ],
-        "fetched_at": "2026-07-16T22:31:02Z",
+        "fetched_at": "2026-07-17T03:45:29Z",
         "component_fetched_at": {
-          "spx_price": "2026-07-16T22:31:02Z",
-          "vix": "2026-07-16T22:31:02Z"
+          "spx_price": "2026-07-17T03:45:29Z",
+          "vix": "2026-07-17T03:45:29Z"
         },
         "verified_for_date": "2026-07-17",
         "status": "source-refreshed",
