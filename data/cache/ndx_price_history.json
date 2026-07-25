@@ -7,14 +7,10 @@
     "name": "Nasdaq",
     "url": "https://api.nasdaq.com/api/quote/NDX/historical?assetclass=index&fromdate=2025-05-01&todate=2026-07-25&limit=400"
   },
-  "fetched_at": "2026-07-25T03:45:53Z",
-  "latest_data_date": "2026-07-23",
+  "fetched_at": "2026-07-25T22:29:02Z",
+  "latest_data_date": "2026-07-24",
   "record_count": 260,
   "records": [
-    {
-      "date": "2025-07-11",
-      "close": 22780.6
-    },
     {
       "date": "2025-07-14",
       "close": 22855.63
@@ -1050,6 +1046,10 @@
     {
       "date": "2026-07-23",
       "close": 28454.81
+    },
+    {
+      "date": "2026-07-24",
+      "close": 28128.34
     }
   ]
 }
