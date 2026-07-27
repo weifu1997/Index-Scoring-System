@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-27T04:11:36Z",
+  "generated_at": "2026-07-27T22:34:51Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
@@ -18,8 +18,8 @@
         "url": "https://worldperatio.com/index/nasdaq-100/"
       },
       "fetched_at": "2026-07-27T04:11:36Z",
-      "status": "source-refreshed",
-      "is_cached": false,
+      "status": "cache-fresh",
+      "is_cached": true,
       "is_stale": false,
       "warning": null,
       "market": {
@@ -43,20 +43,20 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
           }
         ],
-        "fetched_at": "2026-07-27T04:11:36Z",
+        "fetched_at": "2026-07-27T22:34:51Z",
         "component_fetched_at": {
-          "ndx_price": "2026-07-27T04:11:36Z",
-          "vix": "2026-07-27T04:11:36Z",
-          "vxn": "2026-07-27T04:11:36Z"
+          "ndx_price": "2026-07-27T22:34:51Z",
+          "vix": "2026-07-27T22:34:51Z",
+          "vxn": "2026-07-27T22:34:51Z"
         },
-        "verified_for_date": "2026-07-27",
+        "verified_for_date": "2026-07-28",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
         "is_stale": false,
         "warning": null,
-        "vxn": 28.39,
-        "vxn_data_date": "2026-07-24"
+        "vxn": 28.65,
+        "vxn_data_date": "2026-07-27"
       }
     },
     "spx": {
@@ -75,8 +75,8 @@
         "url": "https://worldperatio.com/index/sp-500/"
       },
       "fetched_at": "2026-07-27T04:11:36Z",
-      "status": "source-refreshed",
-      "is_cached": false,
+      "status": "cache-fresh",
+      "is_cached": true,
       "is_stale": false,
       "warning": null,
       "market": {
@@ -96,12 +96,12 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
           }
         ],
-        "fetched_at": "2026-07-27T04:11:36Z",
+        "fetched_at": "2026-07-27T22:34:51Z",
         "component_fetched_at": {
-          "spx_price": "2026-07-27T04:11:36Z",
-          "vix": "2026-07-27T04:11:36Z"
+          "spx_price": "2026-07-27T22:34:51Z",
+          "vix": "2026-07-27T22:34:51Z"
         },
-        "verified_for_date": "2026-07-27",
+        "verified_for_date": "2026-07-28",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
