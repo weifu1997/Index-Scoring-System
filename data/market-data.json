@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-29T03:48:22Z",
+  "generated_at": "2026-07-29T22:30:55Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
@@ -23,9 +23,9 @@
       "is_stale": false,
       "warning": null,
       "market": {
-        "data_date": "2026-07-27",
-        "current_price": 28039.21,
-        "ma200": 26448.0832,
+        "data_date": "2026-07-28",
+        "current_price": 27763.13,
+        "ma200": 26461.2158,
         "ma200_sample_count": 200,
         "vix": 18.21,
         "vix_data_date": "2026-07-28",
@@ -43,20 +43,20 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
           }
         ],
-        "fetched_at": "2026-07-29T03:48:22Z",
+        "fetched_at": "2026-07-29T22:30:55Z",
         "component_fetched_at": {
-          "ndx_price": "2026-07-29T03:48:22Z",
-          "vix": "2026-07-29T03:48:22Z",
-          "vxn": "2026-07-29T03:48:22Z"
+          "ndx_price": "2026-07-29T22:30:55Z",
+          "vix": "2026-07-29T22:30:55Z",
+          "vxn": "2026-07-29T22:30:55Z"
         },
-        "verified_for_date": "2026-07-29",
+        "verified_for_date": "2026-07-30",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
         "is_stale": false,
         "warning": null,
-        "vxn": 28.61,
-        "vxn_data_date": "2026-07-28"
+        "vxn": 30.84,
+        "vxn_data_date": "2026-07-29"
       }
     },
     "spx": {
@@ -96,12 +96,12 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
           }
         ],
-        "fetched_at": "2026-07-29T03:48:22Z",
+        "fetched_at": "2026-07-29T22:30:55Z",
         "component_fetched_at": {
-          "spx_price": "2026-07-29T03:48:22Z",
-          "vix": "2026-07-29T03:48:22Z"
+          "spx_price": "2026-07-29T22:30:55Z",
+          "vix": "2026-07-29T22:30:55Z"
         },
-        "verified_for_date": "2026-07-29",
+        "verified_for_date": "2026-07-30",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
