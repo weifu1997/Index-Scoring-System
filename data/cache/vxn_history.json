@@ -7,7 +7,7 @@
     "name": "Cboe Global Markets",
     "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
   },
-  "fetched_at": "2026-08-02T04:02:38Z",
+  "fetched_at": "2026-08-02T22:29:35Z",
   "latest_data_date": "2026-07-31",
   "record_count": 30,
   "records": [
