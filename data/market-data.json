@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-05T03:42:10Z",
+  "generated_at": "2026-08-05T22:35:42Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
@@ -23,9 +23,9 @@
       "is_stale": false,
       "warning": null,
       "market": {
-        "data_date": "2026-08-03",
-        "current_price": 28776.8,
-        "ma200": 26529.7165,
+        "data_date": "2026-08-04",
+        "current_price": 29733.16,
+        "ma200": 26554.6555,
         "ma200_sample_count": 200,
         "vix": 16.5,
         "vix_data_date": "2026-08-04",
@@ -43,20 +43,20 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
           }
         ],
-        "fetched_at": "2026-08-05T03:42:10Z",
+        "fetched_at": "2026-08-05T22:35:42Z",
         "component_fetched_at": {
-          "ndx_price": "2026-08-05T03:42:10Z",
-          "vix": "2026-08-05T03:42:10Z",
-          "vxn": "2026-08-05T03:42:10Z"
+          "ndx_price": "2026-08-05T22:35:42Z",
+          "vix": "2026-08-05T22:35:42Z",
+          "vxn": "2026-08-05T22:35:42Z"
         },
-        "verified_for_date": "2026-08-05",
+        "verified_for_date": "2026-08-06",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
         "is_stale": false,
         "warning": null,
-        "vxn": 25.48,
-        "vxn_data_date": "2026-08-04"
+        "vxn": 24.15,
+        "vxn_data_date": "2026-08-05"
       }
     },
     "spx": {
@@ -96,12 +96,12 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
           }
         ],
-        "fetched_at": "2026-08-05T03:42:10Z",
+        "fetched_at": "2026-08-05T22:35:42Z",
         "component_fetched_at": {
-          "spx_price": "2026-08-05T03:42:10Z",
-          "vix": "2026-08-05T03:42:10Z"
+          "spx_price": "2026-08-05T22:35:42Z",
+          "vix": "2026-08-05T22:35:42Z"
         },
-        "verified_for_date": "2026-08-05",
+        "verified_for_date": "2026-08-06",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
