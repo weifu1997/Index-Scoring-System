@@ -5,9 +5,9 @@
   "name": "Nasdaq-100 close",
   "source": {
     "name": "Nasdaq",
-    "url": "https://api.nasdaq.com/api/quote/NDX/historical?assetclass=index&fromdate=2025-05-23&todate=2026-08-16&limit=400"
+    "url": "https://api.nasdaq.com/api/quote/NDX/historical?assetclass=index&fromdate=2025-05-24&todate=2026-08-17&limit=400"
   },
-  "fetched_at": "2026-08-16T21:47:24Z",
+  "fetched_at": "2026-08-17T02:00:34Z",
   "latest_data_date": "2026-08-14",
   "record_count": 260,
   "records": [
