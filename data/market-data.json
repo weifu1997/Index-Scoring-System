@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-17T02:00:34Z",
+  "generated_at": "2026-08-17T21:51:53Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
       "name": "Nasdaq-100",
       "pe": {
         "data_date": "2026-08-01",
-        "current": 29.737,
-        "ten_year_percentile": 60.8,
+        "current": 29.6882,
+        "ten_year_percentile": 60.0,
         "sample_count": 120,
         "sampling_frequency": "monthly",
         "percentile_method": "inclusive_empirical_cdf"
@@ -17,9 +17,9 @@
         "name": "World PE Ratio",
         "url": "https://worldperatio.com/index/nasdaq-100/"
       },
-      "fetched_at": "2026-08-16T02:04:23Z",
-      "status": "cache-fresh",
-      "is_cached": true,
+      "fetched_at": "2026-08-17T21:51:53Z",
+      "status": "source-refreshed",
+      "is_cached": false,
       "is_stale": false,
       "warning": null,
       "market": {
@@ -43,13 +43,13 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
           }
         ],
-        "fetched_at": "2026-08-17T02:00:34Z",
+        "fetched_at": "2026-08-17T21:51:53Z",
         "component_fetched_at": {
-          "ndx_price": "2026-08-17T02:00:34Z",
-          "vix": "2026-08-17T02:00:34Z",
-          "vxn": "2026-08-17T02:00:34Z"
+          "ndx_price": "2026-08-17T21:51:53Z",
+          "vix": "2026-08-17T21:51:53Z",
+          "vxn": "2026-08-17T21:51:53Z"
         },
-        "verified_for_date": "2026-08-17",
+        "verified_for_date": "2026-08-18",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
@@ -64,8 +64,8 @@
       "name": "S&P 500",
       "pe": {
         "data_date": "2026-08-01",
-        "current": 25.2502,
-        "ten_year_percentile": 77.5,
+        "current": 25.1328,
+        "ten_year_percentile": 76.7,
         "sample_count": 120,
         "sampling_frequency": "monthly",
         "percentile_method": "inclusive_empirical_cdf"
@@ -74,9 +74,9 @@
         "name": "World PE Ratio",
         "url": "https://worldperatio.com/index/sp-500/"
       },
-      "fetched_at": "2026-08-16T02:04:23Z",
-      "status": "cache-fresh",
-      "is_cached": true,
+      "fetched_at": "2026-08-17T21:51:53Z",
+      "status": "source-refreshed",
+      "is_cached": false,
       "is_stale": false,
       "warning": null,
       "market": {
@@ -96,12 +96,12 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
           }
         ],
-        "fetched_at": "2026-08-17T02:00:34Z",
+        "fetched_at": "2026-08-17T21:51:53Z",
         "component_fetched_at": {
-          "spx_price": "2026-08-17T02:00:34Z",
-          "vix": "2026-08-17T02:00:34Z"
+          "spx_price": "2026-08-17T21:51:53Z",
+          "vix": "2026-08-17T21:51:53Z"
         },
-        "verified_for_date": "2026-08-17",
+        "verified_for_date": "2026-08-18",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
