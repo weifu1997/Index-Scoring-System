@@ -6,7 +6,7 @@
     "name": "World PE Ratio",
     "url": "https://worldperatio.com/index/nasdaq-100/"
   },
-  "fetched_at": "2026-08-24T21:55:25Z",
+  "fetched_at": "2026-08-26T02:07:13Z",
   "latest_data_date": "2026-08-01",
   "record_count": 436,
   "records": [
@@ -1752,7 +1752,7 @@
     },
     {
       "date": "2026-08-01",
-      "pe": 28.7303
+      "pe": 28.9093
     }
   ]
 }
