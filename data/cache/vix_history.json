@@ -7,7 +7,7 @@
     "name": "Cboe Global Markets",
     "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
   },
-  "fetched_at": "2026-08-29T03:17:33Z",
+  "fetched_at": "2026-08-29T07:13:51Z",
   "latest_data_date": "2026-08-28",
   "record_count": 30,
   "records": [
