@@ -6,9 +6,9 @@
     "name": "World PE Ratio",
     "url": "https://worldperatio.com/index/sp-500/"
   },
-  "fetched_at": "2026-09-01T00:45:26Z",
-  "latest_data_date": "2026-08-01",
-  "record_count": 1868,
+  "fetched_at": "2026-09-02T04:51:13Z",
+  "latest_data_date": "2026-09-01",
+  "record_count": 1869,
   "records": [
     {
       "date": "1871-01-01",
@@ -7481,6 +7481,10 @@
     {
       "date": "2026-08-01",
       "pe": 24.948
+    },
+    {
+      "date": "2026-09-01",
+      "pe": 24.7766
     }
   ]
 }
