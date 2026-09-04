@@ -7,14 +7,10 @@
     "name": "Cboe Global Markets",
     "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
   },
-  "fetched_at": "2026-09-03T23:28:44Z",
-  "latest_data_date": "2026-09-02",
+  "fetched_at": "2026-09-04T04:51:49Z",
+  "latest_data_date": "2026-09-03",
   "record_count": 30,
   "records": [
-    {
-      "date": "2026-07-23",
-      "close": 18.7
-    },
     {
       "date": "2026-07-24",
       "close": 18.58
@@ -130,6 +126,10 @@
     {
       "date": "2026-09-02",
       "close": 15.2
+    },
+    {
+      "date": "2026-09-03",
+      "close": 14.32
     }
   ]
 }
