@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-05T04:44:37Z",
+  "generated_at": "2026-09-05T23:11:17Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
@@ -18,8 +18,8 @@
         "url": "https://worldperatio.com/index/nasdaq-100/"
       },
       "fetched_at": "2026-09-05T04:44:37Z",
-      "status": "source-refreshed",
-      "is_cached": false,
+      "status": "cache-fresh",
+      "is_cached": true,
       "is_stale": false,
       "warning": null,
       "market": {
@@ -43,13 +43,13 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
           }
         ],
-        "fetched_at": "2026-09-05T04:44:37Z",
+        "fetched_at": "2026-09-05T23:11:17Z",
         "component_fetched_at": {
-          "ndx_price": "2026-09-05T04:44:37Z",
-          "vix": "2026-09-05T04:44:37Z",
-          "vxn": "2026-09-05T04:44:37Z"
+          "ndx_price": "2026-09-05T23:11:17Z",
+          "vix": "2026-09-05T23:11:17Z",
+          "vxn": "2026-09-05T23:11:17Z"
         },
-        "verified_for_date": "2026-09-05",
+        "verified_for_date": "2026-09-06",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
@@ -75,8 +75,8 @@
         "url": "https://worldperatio.com/index/sp-500/"
       },
       "fetched_at": "2026-09-05T04:44:37Z",
-      "status": "source-refreshed",
-      "is_cached": false,
+      "status": "cache-fresh",
+      "is_cached": true,
       "is_stale": false,
       "warning": null,
       "market": {
@@ -96,12 +96,12 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
           }
         ],
-        "fetched_at": "2026-09-05T04:44:37Z",
+        "fetched_at": "2026-09-05T23:11:17Z",
         "component_fetched_at": {
-          "spx_price": "2026-09-05T04:44:37Z",
-          "vix": "2026-09-05T04:44:37Z"
+          "spx_price": "2026-09-05T23:11:17Z",
+          "vix": "2026-09-05T23:11:17Z"
         },
-        "verified_for_date": "2026-09-05",
+        "verified_for_date": "2026-09-06",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
