@@ -7,7 +7,7 @@
     "name": "Cboe Global Markets",
     "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/SPX_History.csv"
   },
-  "fetched_at": "2026-09-09T23:27:47Z",
+  "fetched_at": "2026-09-10T04:59:57Z",
   "latest_data_date": "2026-09-09",
   "record_count": 260,
   "records": [
