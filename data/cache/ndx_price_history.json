@@ -7,7 +7,7 @@
     "name": "Nasdaq",
     "url": "https://api.nasdaq.com/api/quote/NDX/historical?assetclass=index&fromdate=2025-06-23&todate=2026-09-16&limit=400"
   },
-  "fetched_at": "2026-09-16T05:02:02Z",
+  "fetched_at": "2026-09-16T23:45:46Z",
   "latest_data_date": "2026-09-15",
   "record_count": 260,
   "records": [
