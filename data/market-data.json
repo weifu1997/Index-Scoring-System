@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-22T05:12:52Z",
+  "generated_at": "2026-09-22T23:45:10Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
       "name": "Nasdaq-100",
       "pe": {
         "data_date": "2026-09-01",
-        "current": 29.3112,
-        "ten_year_percentile": 58.3,
+        "current": 30.3679,
+        "ten_year_percentile": 66.7,
         "sample_count": 120,
         "sampling_frequency": "monthly",
         "percentile_method": "inclusive_empirical_cdf"
@@ -17,9 +17,9 @@
         "name": "World PE Ratio",
         "url": "https://worldperatio.com/index/nasdaq-100/"
       },
-      "fetched_at": "2026-09-21T05:13:01Z",
-      "status": "cache-fresh",
-      "is_cached": true,
+      "fetched_at": "2026-09-22T23:45:10Z",
+      "status": "source-refreshed",
+      "is_cached": false,
       "is_stale": false,
       "warning": null,
       "market": {
@@ -45,18 +45,18 @@
         ],
         "fetched_at": "2026-09-22T05:12:52Z",
         "component_fetched_at": {
-          "ndx_price": "2026-09-22T05:12:52Z",
+          "ndx_price": "2026-09-22T23:45:10Z",
           "vix": "2026-09-22T05:12:52Z",
-          "vxn": "2026-09-22T05:12:52Z"
+          "vxn": "2026-09-22T23:45:10Z"
         },
-        "verified_for_date": "2026-09-22",
-        "status": "source-refreshed",
+        "verified_for_date": null,
+        "status": "cache-fallback",
         "is_cached": false,
-        "has_cached_components": false,
-        "is_stale": false,
-        "warning": null,
-        "vxn": 20.39,
-        "vxn_data_date": "2026-09-21"
+        "has_cached_components": true,
+        "is_stale": true,
+        "warning": "refresh failed; using last valid cache: <urlopen error [Errno 104] Connection reset by peer>",
+        "vxn": 20.18,
+        "vxn_data_date": "2026-09-22"
       }
     },
     "spx": {
@@ -64,8 +64,8 @@
       "name": "S&P 500",
       "pe": {
         "data_date": "2026-09-01",
-        "current": 24.5065,
-        "ten_year_percentile": 75.0,
+        "current": 24.8826,
+        "ten_year_percentile": 75.8,
         "sample_count": 120,
         "sampling_frequency": "monthly",
         "percentile_method": "inclusive_empirical_cdf"
@@ -74,15 +74,15 @@
         "name": "World PE Ratio",
         "url": "https://worldperatio.com/index/sp-500/"
       },
-      "fetched_at": "2026-09-21T05:13:01Z",
-      "status": "cache-fresh",
-      "is_cached": true,
+      "fetched_at": "2026-09-22T23:45:10Z",
+      "status": "source-refreshed",
+      "is_cached": false,
       "is_stale": false,
       "warning": null,
       "market": {
-        "data_date": "2026-09-21",
-        "current_price": 7764.7,
-        "ma200": 7187.7305,
+        "data_date": "2026-09-22",
+        "current_price": 7764.64,
+        "ma200": 7192.305,
         "ma200_sample_count": 200,
         "vix": 14.87,
         "vix_data_date": "2026-09-21",
@@ -98,15 +98,15 @@
         ],
         "fetched_at": "2026-09-22T05:12:52Z",
         "component_fetched_at": {
-          "spx_price": "2026-09-22T05:12:52Z",
+          "spx_price": "2026-09-22T23:45:10Z",
           "vix": "2026-09-22T05:12:52Z"
         },
-        "verified_for_date": "2026-09-22",
-        "status": "source-refreshed",
+        "verified_for_date": null,
+        "status": "cache-fallback",
         "is_cached": false,
-        "has_cached_components": false,
-        "is_stale": false,
-        "warning": null
+        "has_cached_components": true,
+        "is_stale": true,
+        "warning": "refresh failed; using last valid cache: <urlopen error [Errno 104] Connection reset by peer>"
       }
     }
   },
