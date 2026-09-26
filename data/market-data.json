@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-25T05:09:43Z",
+  "generated_at": "2026-09-26T00:05:33Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
       "name": "Nasdaq-100",
       "pe": {
         "data_date": "2026-09-01",
-        "current": 30.1095,
+        "current": 30.2476,
         "ten_year_percentile": 65.0,
         "sample_count": 120,
         "sampling_frequency": "monthly",
@@ -17,9 +17,9 @@
         "name": "World PE Ratio",
         "url": "https://worldperatio.com/index/nasdaq-100/"
       },
-      "fetched_at": "2026-09-24T23:58:20Z",
-      "status": "cache-fresh",
-      "is_cached": true,
+      "fetched_at": "2026-09-26T00:05:33Z",
+      "status": "source-refreshed",
+      "is_cached": false,
       "is_stale": false,
       "warning": null,
       "market": {
@@ -27,12 +27,12 @@
         "current_price": 30478.86,
         "ma200": 27328.9196,
         "ma200_sample_count": 200,
-        "vix": 14.21,
-        "vix_data_date": "2026-09-22",
+        "vix": 15.67,
+        "vix_data_date": "2026-09-24",
         "sources": [
           {
             "name": "Nasdaq",
-            "url": "https://api.nasdaq.com/api/quote/NDX/historical?assetclass=index&fromdate=2025-07-02&todate=2026-09-25&limit=400"
+            "url": "https://api.nasdaq.com/api/quote/NDX/historical?assetclass=index&fromdate=2025-07-03&todate=2026-09-26&limit=400"
           },
           {
             "name": "Cboe Global Markets",
@@ -43,20 +43,20 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
           }
         ],
-        "fetched_at": "2026-09-25T05:09:43Z",
+        "fetched_at": "2026-09-26T00:05:33Z",
         "component_fetched_at": {
-          "ndx_price": "2026-09-25T05:09:43Z",
-          "vix": "2026-09-25T05:09:43Z",
-          "vxn": "2026-09-25T05:09:43Z"
+          "ndx_price": "2026-09-26T00:05:33Z",
+          "vix": "2026-09-26T00:05:33Z",
+          "vxn": "2026-09-26T00:05:33Z"
         },
-        "verified_for_date": "2026-09-25",
+        "verified_for_date": "2026-09-26",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
         "is_stale": false,
         "warning": null,
-        "vxn": 20.18,
-        "vxn_data_date": "2026-09-22"
+        "vxn": 20.87,
+        "vxn_data_date": "2026-09-25"
       }
     },
     "spx": {
@@ -64,7 +64,7 @@
       "name": "S&P 500",
       "pe": {
         "data_date": "2026-09-01",
-        "current": 24.6832,
+        "current": 24.8173,
         "ten_year_percentile": 75.8,
         "sample_count": 120,
         "sampling_frequency": "monthly",
@@ -74,18 +74,18 @@
         "name": "World PE Ratio",
         "url": "https://worldperatio.com/index/sp-500/"
       },
-      "fetched_at": "2026-09-24T23:58:20Z",
-      "status": "cache-fresh",
-      "is_cached": true,
+      "fetched_at": "2026-09-26T00:05:33Z",
+      "status": "source-refreshed",
+      "is_cached": false,
       "is_stale": false,
       "warning": null,
       "market": {
-        "data_date": "2026-09-22",
-        "current_price": 7764.64,
-        "ma200": 7192.305,
+        "data_date": "2026-09-25",
+        "current_price": 7743.41,
+        "ma200": 7205.2028,
         "ma200_sample_count": 200,
-        "vix": 14.21,
-        "vix_data_date": "2026-09-22",
+        "vix": 15.67,
+        "vix_data_date": "2026-09-24",
         "sources": [
           {
             "name": "Cboe Global Markets",
@@ -96,12 +96,12 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
           }
         ],
-        "fetched_at": "2026-09-25T05:09:43Z",
+        "fetched_at": "2026-09-26T00:05:33Z",
         "component_fetched_at": {
-          "spx_price": "2026-09-25T05:09:43Z",
-          "vix": "2026-09-25T05:09:43Z"
+          "spx_price": "2026-09-26T00:05:33Z",
+          "vix": "2026-09-26T00:05:33Z"
         },
-        "verified_for_date": "2026-09-25",
+        "verified_for_date": "2026-09-26",
         "status": "source-refreshed",
         "is_cached": false,
         "has_cached_components": false,
