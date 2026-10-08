@@ -7,14 +7,10 @@
     "name": "Cboe Global Markets",
     "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
   },
-  "fetched_at": "2026-10-07T06:15:24Z",
-  "latest_data_date": "2026-10-06",
+  "fetched_at": "2026-10-08T01:13:21Z",
+  "latest_data_date": "2026-10-07",
   "record_count": 30,
   "records": [
-    {
-      "date": "2026-08-25",
-      "close": 21.79
-    },
     {
       "date": "2026-08-26",
       "close": 21.42
@@ -130,6 +126,10 @@
     {
       "date": "2026-10-06",
       "close": 21.15
+    },
+    {
+      "date": "2026-10-07",
+      "close": 21.0
     }
   ]
 }
