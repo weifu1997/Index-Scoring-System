@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-10T01:08:50Z",
+  "generated_at": "2026-10-10T06:08:30Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
@@ -23,12 +23,12 @@
       "is_stale": false,
       "warning": null,
       "market": {
-        "data_date": "2026-10-08",
-        "current_price": 30725.81,
-        "ma200": 27598.7167,
+        "data_date": "2026-10-09",
+        "current_price": 30883.15,
+        "ma200": 27625.824,
         "ma200_sample_count": 200,
-        "vix": 15.41,
-        "vix_data_date": "2026-10-08",
+        "vix": 14.84,
+        "vix_data_date": "2026-10-09",
         "sources": [
           {
             "name": "Nasdaq",
@@ -43,11 +43,11 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
           }
         ],
-        "fetched_at": "2026-10-10T01:08:50Z",
+        "fetched_at": "2026-10-10T06:08:30Z",
         "component_fetched_at": {
-          "ndx_price": "2026-10-10T01:08:50Z",
-          "vix": "2026-10-10T01:08:50Z",
-          "vxn": "2026-10-10T01:08:50Z"
+          "ndx_price": "2026-10-10T06:08:30Z",
+          "vix": "2026-10-10T06:08:30Z",
+          "vxn": "2026-10-10T06:08:30Z"
         },
         "verified_for_date": "2026-10-10",
         "status": "source-refreshed",
@@ -80,12 +80,12 @@
       "is_stale": false,
       "warning": null,
       "market": {
-        "data_date": "2026-10-08",
-        "current_price": 7765.36,
-        "ma200": 7245.9637,
+        "data_date": "2026-10-09",
+        "current_price": 7811.54,
+        "ma200": 7250.629,
         "ma200_sample_count": 200,
-        "vix": 15.41,
-        "vix_data_date": "2026-10-08",
+        "vix": 14.84,
+        "vix_data_date": "2026-10-09",
         "sources": [
           {
             "name": "Cboe Global Markets",
@@ -96,10 +96,10 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
           }
         ],
-        "fetched_at": "2026-10-10T01:08:50Z",
+        "fetched_at": "2026-10-10T06:08:30Z",
         "component_fetched_at": {
-          "spx_price": "2026-10-10T01:08:50Z",
-          "vix": "2026-10-10T01:08:50Z"
+          "spx_price": "2026-10-10T06:08:30Z",
+          "vix": "2026-10-10T06:08:30Z"
         },
         "verified_for_date": "2026-10-10",
         "status": "source-refreshed",
