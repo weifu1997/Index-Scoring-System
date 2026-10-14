@@ -7,14 +7,10 @@
     "name": "Cboe Global Markets",
     "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/SPX_History.csv"
   },
-  "fetched_at": "2026-10-14T00:31:56Z",
-  "latest_data_date": "2026-10-12",
+  "fetched_at": "2026-10-14T05:09:00Z",
+  "latest_data_date": "2026-10-13",
   "record_count": 260,
   "records": [
-    {
-      "date": "2025-09-30",
-      "close": 6688.46
-    },
     {
       "date": "2025-10-01",
       "close": 6711.2
@@ -1050,6 +1046,10 @@
     {
       "date": "2026-10-12",
       "close": 7807.24
+    },
+    {
+      "date": "2026-10-13",
+      "close": 7805.45
     }
   ]
 }
