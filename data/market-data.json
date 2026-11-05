@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-05T01:43:11Z",
+  "generated_at": "2026-11-05T07:07:42Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
       "name": "Nasdaq-100",
       "pe": {
         "data_date": "2026-11-01",
-        "current": 25.9599,
-        "ten_year_percentile": 42.5,
+        "current": 26.2126,
+        "ten_year_percentile": 45.0,
         "sample_count": 120,
         "sampling_frequency": "monthly",
         "percentile_method": "inclusive_empirical_cdf"
@@ -17,18 +17,18 @@
         "name": "World PE Ratio",
         "url": "https://worldperatio.com/index/nasdaq-100/"
       },
-      "fetched_at": "2026-11-04T06:47:37Z",
-      "status": "cache-fresh",
-      "is_cached": true,
+      "fetched_at": "2026-11-05T07:07:42Z",
+      "status": "source-refreshed",
+      "is_cached": false,
       "is_stale": false,
       "warning": null,
       "market": {
-        "data_date": "2026-11-03",
-        "current_price": 28180.26,
-        "ma200": 27952.7702,
+        "data_date": "2026-11-04",
+        "current_price": 28437.17,
+        "ma200": 27970.0183,
         "ma200_sample_count": 200,
-        "vix": 20.83,
-        "vix_data_date": "2026-11-03",
+        "vix": 16.61,
+        "vix_data_date": "2026-11-04",
         "sources": [
           {
             "name": "Nasdaq",
@@ -43,11 +43,11 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
           }
         ],
-        "fetched_at": "2026-11-05T01:43:11Z",
+        "fetched_at": "2026-11-05T07:07:42Z",
         "component_fetched_at": {
-          "ndx_price": "2026-11-05T01:43:11Z",
-          "vix": "2026-11-05T01:43:11Z",
-          "vxn": "2026-11-05T01:43:11Z"
+          "ndx_price": "2026-11-05T07:07:42Z",
+          "vix": "2026-11-05T07:07:42Z",
+          "vxn": "2026-11-05T07:07:42Z"
         },
         "verified_for_date": "2026-11-05",
         "status": "source-refreshed",
@@ -64,8 +64,8 @@
       "name": "S&P 500",
       "pe": {
         "data_date": "2026-11-01",
-        "current": 23.5878,
-        "ten_year_percentile": 70.8,
+        "current": 23.9774,
+        "ten_year_percentile": 73.3,
         "sample_count": 120,
         "sampling_frequency": "monthly",
         "percentile_method": "inclusive_empirical_cdf"
@@ -74,18 +74,18 @@
         "name": "World PE Ratio",
         "url": "https://worldperatio.com/index/sp-500/"
       },
-      "fetched_at": "2026-11-04T06:47:37Z",
-      "status": "cache-fresh",
-      "is_cached": true,
+      "fetched_at": "2026-11-05T07:07:42Z",
+      "status": "source-refreshed",
+      "is_cached": false,
       "is_stale": false,
       "warning": null,
       "market": {
-        "data_date": "2026-11-03",
-        "current_price": 7568.92,
-        "ma200": 7315.8863,
+        "data_date": "2026-11-04",
+        "current_price": 7688.62,
+        "ma200": 7320.3452,
         "ma200_sample_count": 200,
-        "vix": 20.83,
-        "vix_data_date": "2026-11-03",
+        "vix": 16.61,
+        "vix_data_date": "2026-11-04",
         "sources": [
           {
             "name": "Cboe Global Markets",
@@ -96,10 +96,10 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
           }
         ],
-        "fetched_at": "2026-11-05T01:43:11Z",
+        "fetched_at": "2026-11-05T07:07:42Z",
         "component_fetched_at": {
-          "spx_price": "2026-11-05T01:43:11Z",
-          "vix": "2026-11-05T01:43:11Z"
+          "spx_price": "2026-11-05T07:07:42Z",
+          "vix": "2026-11-05T07:07:42Z"
         },
         "verified_for_date": "2026-11-05",
         "status": "source-refreshed",
