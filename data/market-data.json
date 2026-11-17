@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-17T04:07:25Z",
+  "generated_at": "2026-11-17T08:14:02Z",
   "indices": {
     "ndx": {
       "symbol": "NDX",
@@ -18,14 +18,14 @@
         "url": "https://worldperatio.com/index/nasdaq-100/"
       },
       "fetched_at": "2026-11-17T04:07:25Z",
-      "status": "source-refreshed",
-      "is_cached": false,
+      "status": "cache-fresh",
+      "is_cached": true,
       "is_stale": false,
       "warning": null,
       "market": {
-        "data_date": "2026-11-13",
-        "current_price": 27943.74,
-        "ma200": 28039.3431,
+        "data_date": "2026-11-16",
+        "current_price": 27197.15,
+        "ma200": 28047.5668,
         "ma200_sample_count": 200,
         "vix": 22.91,
         "vix_data_date": "2026-11-16",
@@ -43,11 +43,11 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VXN_History.csv"
           }
         ],
-        "fetched_at": "2026-11-17T04:07:25Z",
+        "fetched_at": "2026-11-17T08:14:02Z",
         "component_fetched_at": {
-          "ndx_price": "2026-11-17T04:07:25Z",
-          "vix": "2026-11-17T04:07:25Z",
-          "vxn": "2026-11-17T04:07:25Z"
+          "ndx_price": "2026-11-17T08:14:02Z",
+          "vix": "2026-11-17T08:14:02Z",
+          "vxn": "2026-11-17T08:14:02Z"
         },
         "verified_for_date": "2026-11-17",
         "status": "source-refreshed",
@@ -75,8 +75,8 @@
         "url": "https://worldperatio.com/index/sp-500/"
       },
       "fetched_at": "2026-11-17T04:07:25Z",
-      "status": "source-refreshed",
-      "is_cached": false,
+      "status": "cache-fresh",
+      "is_cached": true,
       "is_stale": false,
       "warning": null,
       "market": {
@@ -96,10 +96,10 @@
             "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv"
           }
         ],
-        "fetched_at": "2026-11-17T04:07:25Z",
+        "fetched_at": "2026-11-17T08:14:02Z",
         "component_fetched_at": {
-          "spx_price": "2026-11-17T04:07:25Z",
-          "vix": "2026-11-17T04:07:25Z"
+          "spx_price": "2026-11-17T08:14:02Z",
+          "vix": "2026-11-17T08:14:02Z"
         },
         "verified_for_date": "2026-11-17",
         "status": "source-refreshed",
